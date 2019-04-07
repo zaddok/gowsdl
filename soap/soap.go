@@ -276,6 +276,9 @@ func (s *Client) Call(soapAction string, request, response interface{}) error {
 	}
 	defer res.Body.Close()
 	fmt.Println("http response", res.StatusCode)
+	if res.StatusCode != 200 {
+		fmt.Println("http url", s.url)
+	}
 
 	rawbody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
