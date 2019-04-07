@@ -231,15 +231,18 @@ func (s *Client) Call(soapAction string, request, response interface{}) error {
 	encoder := xml.NewEncoder(buffer)
 
 	if err := encoder.Encode(envelope); err != nil {
+		fmt.Println("Encoding failed:", err)
 		return err
 	}
 
 	if err := encoder.Flush(); err != nil {
+		fmt.Println("Encoding flush failed:", err)
 		return err
 	}
 
 	req, err := http.NewRequest("POST", s.url, buffer)
 	if err != nil {
+		fmt.Println("Post init:", err)
 		return err
 	}
 	if s.opts.auth != nil {
@@ -266,6 +269,8 @@ func (s *Client) Call(soapAction string, request, response interface{}) error {
 	client := &http.Client{Transport: tr}
 	res, err := client.Do(req)
 	if err != nil {
+		fmt.Println("do request failed", err)
+		fmt.Println(res.StatusCode)
 		return err
 	}
 	defer res.Body.Close()
@@ -282,11 +287,13 @@ func (s *Client) Call(soapAction string, request, response interface{}) error {
 	respEnvelope.Body = SOAPBody{Content: response}
 	err = xml.Unmarshal(rawbody, respEnvelope)
 	if err != nil {
+		fmt.Println("unmarshal failed:", err)
 		return err
 	}
 
 	fault := respEnvelope.Body.Fault
 	if fault != nil {
+		fmt.Println("fault flag", fault)
 		return fault
 	}
 
