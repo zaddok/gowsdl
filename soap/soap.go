@@ -241,7 +241,7 @@ func (s *Client) Call(soapAction string, request, response interface{}) error {
 		return err
 	}
 
-	fmt.Println(string(buffer))
+	fmt.Println(string(*buffer))
 	req, err := http.NewRequest("POST", s.url, buffer)
 	if err != nil {
 		fmt.Println("Post init:", err)
