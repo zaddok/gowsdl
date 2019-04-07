@@ -275,12 +275,14 @@ func (s *Client) Call(soapAction string, request, response interface{}) error {
 		return err
 	}
 	defer res.Body.Close()
+	fmt.Println("http response", res.StatusCode)
 
 	rawbody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
 	if len(rawbody) == 0 {
+		fmt.Println("rawbody empty")
 		return nil
 	}
 
